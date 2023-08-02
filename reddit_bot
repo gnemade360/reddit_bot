@@ -1,0 +1,78 @@
+Reddit Bot
+Creating a Reddit bot using Python involves using the Reddit API and some Python libraries like praw (Python Reddit API Wrapper) to interact with the Reddit platform. Before starting, make sure you have Python installed and a Reddit account. 
+Follow these steps to create a simple Reddit bot that replies to comments mentioning a specific keyword.
+
+Install the required libraries:
+You need to have praw installed. You can install it using pip:
+
+pip install praw
+
+
+Creating a Reddit bot using Python involves using the Reddit API and some Python libraries like praw (Python Reddit API Wrapper) to interact with the Reddit platform. Before starting, make sure you have Python installed and a Reddit account. Follow these steps to create a simple Reddit bot that replies to comments mentioning a specific keyword.
+
+Install the required libraries:
+You need to have praw installed. You can install it using pip:
+
+bash
+Copy code
+pip install praw
+Create a Reddit App and obtain credentials:
+Visit the following link: https://www.reddit.com/prefs/apps
+Scroll down to "Developed Applications" and click "Create App or Another App"
+Fill out the form (name, description, etc.). Choose "script" for the type of application.
+In the "about url" field, you can put any valid URL (e.g., https://www.example.com).
+In the "redirect uri" field, you can put http://localhost:8000.
+Click "create app."
+
+Get the API credentials:
+After creating the app, you will see your "client_id" and "client_secret" on the app details page.
+You also need your Reddit username and password.
+
+Write the Python code:
+Here's a simple example of a Reddit bot using praw that will reply to comments mentioning a specific keyword:
+
+import praw
+import time
+
+# Replace these with your actual Reddit API credentials
+reddit_username = 'YOUR_REDDIT_USERNAME'
+reddit_password = 'YOUR_REDDIT_PASSWORD'
+client_id = 'YOUR_CLIENT_ID'
+client_secret = 'YOUR_CLIENT_SECRET'
+user_agent = 'YOUR_USER_AGENT'  # You can put anything descriptive here
+
+keyword = 'YOUR_KEYWORD'  # Replace with the keyword you want to search for
+
+# Initialize the Reddit API wrapper
+reddit = praw.Reddit(
+    client_id=client_id,
+    client_secret=client_secret,
+    user_agent=user_agent,
+    username=reddit_username,
+    password=reddit_password
+)
+
+def bot_action():
+    subreddit = reddit.subreddit('YOUR_SUBREDDIT')  # Replace with the subreddit you want to monitor
+    for comment in subreddit.stream.comments(skip_existing=True):
+        if keyword in comment.body.lower():
+            reply_text = "Hello! I see you mentioned the keyword '{}' in your comment. This is a bot reply.".format(keyword)
+            comment.reply(reply_text)
+            print("Replied to a comment.")
+
+def main():
+    while True:
+        try:
+            bot_action()
+        except Exception as e:
+            print("An error occurred: ", str(e))
+            # Handle the error here if needed
+        finally:
+            time.sleep(30)  # Delay before checking for new comments again
+
+if __name__ == '__main__':
+    main()
+
+Replace YOUR_REDDIT_USERNAME, YOUR_REDDIT_PASSWORD, YOUR_CLIENT_ID, YOUR_CLIENT_SECRET, YOUR_USER_AGENT, YOUR_KEYWORD, and YOUR_SUBREDDIT with your actual Reddit API credentials, the keyword you want to search for, and the subreddit you want to monitor.
+
+Keep in mind that running a bot on Reddit should be done responsibly and ethically, following Reddit's API usage guidelines and subreddit rules.
